@@ -10,10 +10,10 @@ head(hirsut)
 
 attach(hirsut)
 
-hirsut.0 <- hirsut[hirsut$Treatment == 0,]
-hirsut.1 <- hirsut[hirsut$Treatment == 1,]
-hirsut.2 <- hirsut[hirsut$Treatment == 2,]
-hirsut.3 <- hirsut[hirsut$Treatment == 3,]
+hirsut.0 <- hirsut[Treatment == 0,]
+hirsut.1 <- hirsut[Treatment == 1,]
+hirsut.2 <- hirsut[Treatment == 2,]
+hirsut.3 <- hirsut[Treatment == 3,]
 
 # 1. In the following regression models test the no eect null hypothesis
 # (model="no effect" in sm.regression):
@@ -55,7 +55,7 @@ lm2.tr02.fgm12 <- sm.regression(hirsut.0and2$FGm12, Tr02, model = "no effect")
 
 hirsut.2and3 <- rbind(hirsut.2, hirsut.3)
 
-#Create a binary variable (Tr02) with value 0 for patients with
+#Create a binary variable (Tr23) with value 0 for patients with
 # treatment 0, and 1 for patients with treatment 2.
 
 Tr23 <- hirsut.2and3$Treatment-2
@@ -78,8 +78,8 @@ lm4.weight.height.0 <- sm.regression(hirsut.0$height, hirsut.0$weight, model = "
 lm4.weight.height.2 <- sm.regression(hirsut.2$height, hirsut.2$weight, model = "no effect")
 
 # SysPres as a function of height
-lm4.syspres.height.0 <- sm.regression(hirsut.0$SysPres, hirsut.0$weight, model = "no effect")
-lm4.syspres.height.2 <- sm.regression(hirsut.2$SysPres, hirsut.2$weight, model = "no effect")
+lm4.syspres.height.0 <- sm.regression(hirsut.0$height, hirsut.0$SysPres, model = "no effect")
+lm4.syspres.height.2 <- sm.regression(hirsut.2$height, hirsut.2$SysPres, model = "no effect")
 
 
 ##Repeat the last point using now treatments 2 and 3.
@@ -90,7 +90,7 @@ lm5.weight.height.3 <- sm.regression(hirsut.3$height, hirsut.3$weight, model = "
 
 # SysPres as a function of height
 lm5.syspres.height.2 <- lm4.syspres.height.2
-lm5.syspres.height.3 <- sm.regression(hirsut.3$SysPres, hirsut.3$weight, model = "no effect")
+lm5.syspres.height.3 <- sm.regression(hirsut.3$height, hirsut.3$SysPres, model = "no effect")
 
 
 # In the following regressions test whether the regression functions are
@@ -99,3 +99,18 @@ lm5.syspres.height.3 <- sm.regression(hirsut.3$SysPres, hirsut.3$weight, model =
 # SysPres as a function of height
 
 #Done above.
+
+
+#7. Comparing the regression function
+# FGm12 as a function of FGm0
+# in the 4 groups defined by Treatment.
+# In sm.ancova, use both h1 and h2 obtained by cross-validation and
+# AICc criteria, respectively (use argument method="cv" or method="aicc"
+#   in h.select).
+# In function sig.trace use hvec = seq(min(h1,h2)/3,3*max(h1,h2),length=20).
+
+lm7.fgm12.fgm0.0 <- sm.regression(hirsut.0$FGm0, hirsut.0$FGm12, method = "cv", xlab="FGm0", ylab="FGm12")
+lm7.fgm12.fgm0.1 <- sm.regression(hirsut.1$FGm0, hirsut.1$FGm12, method = "cv", xlab="FGm0", ylab="FGm12")
+lm7.fgm12.fgm0.2 <- sm.regression(hirsut.2$FGm0, hirsut.2$FGm12, method = "cv", xlab="FGm0", ylab="FGm12")
+lm7.fgm12.fgm0.3 <- sm.regression(hirsut.3$FGm0, hirsut.3$FGm12, method = "cv", xlab="FGm0", ylab="FGm12")
+# not over...
