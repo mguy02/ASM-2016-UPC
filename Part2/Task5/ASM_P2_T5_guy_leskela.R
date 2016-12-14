@@ -4,8 +4,6 @@ library("sm")
 
 hirsut<-read.table(file="hirsutism.dat",head=T, sep="\t")
 
-hirsut<- na.omit(hirsut)
-
 head(hirsut)
 
 attach(hirsut)
@@ -14,91 +12,6 @@ hirsut.0 <- hirsut[Treatment == 0,]
 hirsut.1 <- hirsut[Treatment == 1,]
 hirsut.2 <- hirsut[Treatment == 2,]
 hirsut.3 <- hirsut[Treatment == 3,]
-
-# 1. In the following regression models test the no eect null hypothesis
-# (model="no effect" in sm.regression):
-
-  # weight as a function of height
-  lm1.weight.height <- sm.regression(height, weight, model = "no effect")
-
-  # SysPres as a function of height
-  lm1.syspres.height <- sm.regression(height, SysPres, model = "no effect")
-  
-  # SysPres as a function of a weight
-  lm1.syspres.weight <- sm.regression(weight, SysPres, model = "no effect")
-  
-  # FGm0 as a function of weight
-  lm1.FGm0.weight <- sm.regression(weight, FGm0, model = "no effect")
-  
-  # SysPres as a function of DiaPres
-  lm1.syspres.diapres <- sm.regression(DiaPres, SysPres, model = "no effect")
-  
-
-hirsut.0and2 <- rbind(hirsut.0, hirsut.2)
-
-#Create a binary variable (Tr02) with value 0 for patients with
-# treatment 0, and 1 for patients with treatment 2.
-
-Tr02 <- hirsut.0and2$Treatment / 2
-
- 
-# Test the null hypothesis stating that the logistic model is appropriate
-# in the regression:
-#   Tr02 as a function of FGm12.
-
-lm2.tr02.fgm12 <- sm.regression(hirsut.0and2$FGm12, Tr02, model = "no effect")
-
-#So it is not significant
-
-
-#Repeat the last point using now treatments 2 and 3.
-
-hirsut.2and3 <- rbind(hirsut.2, hirsut.3)
-
-#Create a binary variable (Tr23) with value 0 for patients with
-# treatment 0, and 1 for patients with treatment 2.
-
-Tr23 <- hirsut.2and3$Treatment-2
-
-# Test the null hypothesis stating that the logistic model is appropriate
-# in the regression:
-#   Tr23 as a function of FGm12.
-
-lm3.tr23.fgm12 <- sm.regression(hirsut.2and3$FGm12, Tr23, model = "no effect")
-
-#So it is more significant
-
-
-# For this point use only patients with treatments 0 or 2. In the following
-# regressions test whether the regression functions are equal in both
-# groups.
-
-# weight as a function of height
-lm4.weight.height.0 <- sm.regression(hirsut.0$height, hirsut.0$weight, model = "no effect")
-lm4.weight.height.2 <- sm.regression(hirsut.2$height, hirsut.2$weight, model = "no effect")
-
-# SysPres as a function of height
-lm4.syspres.height.0 <- sm.regression(hirsut.0$height, hirsut.0$SysPres, model = "no effect")
-lm4.syspres.height.2 <- sm.regression(hirsut.2$height, hirsut.2$SysPres, model = "no effect")
-
-
-##Repeat the last point using now treatments 2 and 3.
-
-# weight as a function of height
-lm5.weight.height.2 <- lm4.weight.height.2
-lm5.weight.height.3 <- sm.regression(hirsut.3$height, hirsut.3$weight, model = "no effect")
-
-# SysPres as a function of height
-lm5.syspres.height.2 <- lm4.syspres.height.2
-lm5.syspres.height.3 <- sm.regression(hirsut.3$height, hirsut.3$SysPres, model = "no effect")
-
-
-# In the following regressions test whether the regression functions are
-# equal in the 4 groups defined by variable Treatment.
-# weight as a function of height
-# SysPres as a function of height
-
-#Done above.
 
 
 #7. Comparing the regression function
@@ -152,3 +65,17 @@ lm9.fgm12.fgm0.parallel.h1 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h1, metho
 
 lm9.fgm12.fgm0.equal.h2 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h2, method = "cv", group = group123, model = "equal", xlab="FGm0", ylab="FGm12")
 lm9.fgm12.fgm0.parallel.h2 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h2, method = "cv", group = group123, model = "parallel", xlab="FGm0", ylab="FGm12")
+
+# 10. For this point use only patients with treatments 1, 2 or 3. Test the
+# linearity of the regression function
+# FGm12 as a function of FGm0.
+# Use the indications given above for choosing the bandwidth.
+
+hirsut.23 <- rbind(hirsut.2, hirsut.3)
+hirsut.123 <- rbind(hirsut.1, hirsut.23)
+
+h1.123 <- h.select(x = hirsut.123$FGm0, y = hirsut.123$FGm12, method = "cv")
+h2.123 <- h.select(x = hirsut.123$FGm0, y = hirsut.123$FGm12, method = "aicc")
+
+lm10.fgm12.fgm0.linear.h1.123 <- sm.regression(hirsut.123$FGm0, hirsut.123$FGm12, h=h1.123, display="se",model="linear")
+lm10.fgm12.fgm0.linear.h1.123 <- sm.regression(hirsut.123$FGm0, hirsut.123$FGm12, h=h2.123, display="se",model="linear")
