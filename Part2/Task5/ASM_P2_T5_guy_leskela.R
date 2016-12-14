@@ -109,8 +109,20 @@ lm5.syspres.height.3 <- sm.regression(hirsut.3$height, hirsut.3$SysPres, model =
 #   in h.select).
 # In function sig.trace use hvec = seq(min(h1,h2)/3,3*max(h1,h2),length=20).
 
-lm7.fgm12.fgm0.0 <- sm.regression(hirsut.0$FGm0, hirsut.0$FGm12, method = "cv", xlab="FGm0", ylab="FGm12")
-lm7.fgm12.fgm0.1 <- sm.regression(hirsut.1$FGm0, hirsut.1$FGm12, method = "cv", xlab="FGm0", ylab="FGm12")
-lm7.fgm12.fgm0.2 <- sm.regression(hirsut.2$FGm0, hirsut.2$FGm12, method = "cv", xlab="FGm0", ylab="FGm12")
-lm7.fgm12.fgm0.3 <- sm.regression(hirsut.3$FGm0, hirsut.3$FGm12, method = "cv", xlab="FGm0", ylab="FGm12")
-# not over...
+
+h1 <- h.select(x = FGm0, y = FGm12, method = "cv")
+h2 <- h.select(x = FGm0, y = FGm12, method = "aicc")
+hvec = seq(min(h1,h2)/3,3*max(h1,h2), length=20)
+
+# using the h1 bandwidth
+lm7.fgm12.fgm0.0 <- sm.regression(hirsut.0$FGm0, hirsut.0$FGm12, h = h1, method = "cv", xlab="FGm0", ylab="FGm12")
+lm7.fgm12.fgm0.1 <- sm.regression(hirsut.1$FGm0, hirsut.1$FGm12, h = h1, method = "cv", xlab="FGm0", ylab="FGm12")
+lm7.fgm12.fgm0.2 <- sm.regression(hirsut.2$FGm0, hirsut.2$FGm12, h = h1, method = "cv", xlab="FGm0", ylab="FGm12")
+lm7.fgm12.fgm0.3 <- sm.regression(hirsut.3$FGm0, hirsut.3$FGm12, h = h1, method = "cv", xlab="FGm0", ylab="FGm12")
+
+# using the h2 bandwidth
+
+lm7.fgm12.fgm0.0 <- sm.regression(hirsut.0$FGm0, hirsut.0$FGm12, h = h2, method = "cv", xlab="FGm0", ylab="FGm12")
+lm7.fgm12.fgm0.1 <- sm.regression(hirsut.1$FGm0, hirsut.1$FGm12, h = h2, method = "cv", xlab="FGm0", ylab="FGm12")
+lm7.fgm12.fgm0.2 <- sm.regression(hirsut.2$FGm0, hirsut.2$FGm12, h = h2, method = "cv", xlab="FGm0", ylab="FGm12")
+lm7.fgm12.fgm0.3 <- sm.regression(hirsut.3$FGm0, hirsut.3$FGm12, h = h2, method = "cv", xlab="FGm0", ylab="FGm12")
