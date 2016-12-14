@@ -126,9 +126,29 @@ lm7.fgm12.fgm0.h2 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h2, method = "cv",
 # Use the indications given in the last point for choosing the bandwidth.
 
 group0 <- hirsut$Treatment == 0
-lm8.fgm12.fgm0.h1 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h1, method = "cv", group = group0, model = "equal", xlab="FGm0", ylab="FGm12")
-lm8.fgm12.fgm0.h1 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h1, method = "cv", group = group0, model = "parallel", xlab="FGm0", ylab="FGm12")
+# name is as follows:
+# assignment.dependent.independent.group.model.bandwidth
+lm8.fgm12.fgm0.0.equal.h1 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h1, method = "cv", group = group0, model = "equal", xlab="FGm0", ylab="FGm12")
+lm8.fgm12.fgm0.0.parallel.h1 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h1, method = "cv", group = group0, model = "parallel", xlab="FGm0", ylab="FGm12")
+lm8.fgm12.fgm0.0.equal.h2 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h2, method = "cv", group = group0, model = "equal", xlab="FGm0", ylab="FGm12")
+lm8.fgm12.fgm0.0.parallel.h2 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h2, method = "cv", group = group0, model = "parallel", xlab="FGm0", ylab="FGm12")
 
 group123 <- hirsut$Treatment!= 0
-lm8.fgm12.fgm0.h1 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h1, method = "cv", group = group123, model = "equal", xlab="FGm0", ylab="FGm12")
-lm8.fgm12.fgm0.h1 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h1, method = "cv", group = group123, model = "parallel", xlab="FGm0", ylab="FGm12")
+lm8.fgm12.fgm0.123.equal.h1 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h1, method = "cv", group = group123, model = "equal", xlab="FGm0", ylab="FGm12")
+lm8.fgm12.fgm0.123.equal.h1 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h1, method = "cv", group = group123, model = "parallel", xlab="FGm0", ylab="FGm12")
+lm8.fgm12.fgm0.123.equal.h2 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h2, method = "cv", group = group123, model = "equal", xlab="FGm0", ylab="FGm12")
+lm8.fgm12.fgm0.123.equal.h2 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h2, method = "cv", group = group123, model = "parallel", xlab="FGm0", ylab="FGm12")
+
+# 9. For this point use only patients with treatments 1 or 3. Test whether
+# the regression function
+# FGm12 as a function of FGm0
+# can be considered equal or parallel in the two subpopulations defined
+# by Treatment.
+# Use the indications given above for choosing the bandwidth.
+
+group13 <- hirsut$Treatment == 1 | hirsut$Treatment == 3
+lm9.fgm12.fgm0.equal.h1 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h1, method = "cv", group = group13, model = "equal", xlab="FGm0", ylab="FGm12")
+lm9.fgm12.fgm0.parallel.h1 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h1, method = "cv", group = group13, model = "parallel", xlab="FGm0", ylab="FGm12")
+
+lm9.fgm12.fgm0.equal.h2 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h2, method = "cv", group = group123, model = "equal", xlab="FGm0", ylab="FGm12")
+lm9.fgm12.fgm0.parallel.h2 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h2, method = "cv", group = group123, model = "parallel", xlab="FGm0", ylab="FGm12")
