@@ -115,14 +115,20 @@ h2 <- h.select(x = FGm0, y = FGm12, method = "aicc")
 hvec = seq(min(h1,h2)/3,3*max(h1,h2), length=20)
 
 # using the h1 bandwidth
-lm7.fgm12.fgm0.0 <- sm.regression(hirsut.0$FGm0, hirsut.0$FGm12, h = h1, method = "cv", xlab="FGm0", ylab="FGm12")
-lm7.fgm12.fgm0.1 <- sm.regression(hirsut.1$FGm0, hirsut.1$FGm12, h = h1, method = "cv", xlab="FGm0", ylab="FGm12")
-lm7.fgm12.fgm0.2 <- sm.regression(hirsut.2$FGm0, hirsut.2$FGm12, h = h1, method = "cv", xlab="FGm0", ylab="FGm12")
-lm7.fgm12.fgm0.3 <- sm.regression(hirsut.3$FGm0, hirsut.3$FGm12, h = h1, method = "cv", xlab="FGm0", ylab="FGm12")
-
+lm7.fgm12.fgm0.h1 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h1, method = "cv", group = Treatment, model = "equal", xlab="FGm0", ylab="FGm12")
 # using the h2 bandwidth
+lm7.fgm12.fgm0.h2 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h2, method = "cv", group = Treatment, model = "equal", xlab="FGm0", ylab="FGm12")
 
-lm7.fgm12.fgm0.0 <- sm.regression(hirsut.0$FGm0, hirsut.0$FGm12, h = h2, method = "cv", xlab="FGm0", ylab="FGm12")
-lm7.fgm12.fgm0.1 <- sm.regression(hirsut.1$FGm0, hirsut.1$FGm12, h = h2, method = "cv", xlab="FGm0", ylab="FGm12")
-lm7.fgm12.fgm0.2 <- sm.regression(hirsut.2$FGm0, hirsut.2$FGm12, h = h2, method = "cv", xlab="FGm0", ylab="FGm12")
-lm7.fgm12.fgm0.3 <- sm.regression(hirsut.3$FGm0, hirsut.3$FGm12, h = h2, method = "cv", xlab="FGm0", ylab="FGm12")
+# 8. Test whether the regression function
+# FGm12 as a function of FGm0
+# can be considered equal or parallel in the two subpopulations defined
+# according to Treatment==0 or not.
+# Use the indications given in the last point for choosing the bandwidth.
+
+group0 <- hirsut$Treatment == 0
+lm8.fgm12.fgm0.h1 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h1, method = "cv", group = group0, model = "equal", xlab="FGm0", ylab="FGm12")
+lm8.fgm12.fgm0.h1 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h1, method = "cv", group = group0, model = "parallel", xlab="FGm0", ylab="FGm12")
+
+group123 <- hirsut$Treatment!= 0
+lm8.fgm12.fgm0.h1 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h1, method = "cv", group = group123, model = "equal", xlab="FGm0", ylab="FGm12")
+lm8.fgm12.fgm0.h1 <- sm.ancova(hirsut$FGm0, hirsut$FGm12, h = h1, method = "cv", group = group123, model = "parallel", xlab="FGm0", ylab="FGm12")
