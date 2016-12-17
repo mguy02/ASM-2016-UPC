@@ -10,14 +10,6 @@
 # 
 # Martin Guy and Hannes Leskela
 
-prob.missclas.CV <- function(x,y,h){
-  n <- length(x)
-  pred <- sapply(1:n, 
-      function(i,x,y,h){
-         sm.poisson(x=x[-i],y=y[-i],h=h,eval.points=x[i],display="none")$estimate
-      },   x,y,h)
-  return(sum(abs(pred-y)>.5)/n)
-}
 
 loglik.CV <- function(x,y,h){
   n <- length(x)
@@ -25,7 +17,7 @@ loglik.CV <- function(x,y,h){
       function(i,x,y,h){
          sm.poisson(x=x[-i],y=y[-i],h=h,eval.points=x[i],display="none")$estimate
       },   x,y,h)
-  return(-sum( y*log(pred/(1-pred)) + log(1-pred) ))
+  return(sum( y*log(pred) - n*pred ))
 }
 
 # method can be equal to 'loglik.CV' (default) or 'prob.missclas.CV'

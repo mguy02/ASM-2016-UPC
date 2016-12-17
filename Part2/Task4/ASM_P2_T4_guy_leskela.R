@@ -16,6 +16,7 @@ library(sm)
 library(KernSmooth)
 
 
+
 # Read data from countries.txt:
 
 countries<-read.table(file="countries.txt",head=T,row.names=2,dec=",")
@@ -46,15 +47,16 @@ source("h.cv.sm.poisson.R")
 
   # Local Poisson regression
 
-h1.CV.prob <- h.cv.sm.poisson(inf.mort, le.fm.0, method=prob.missclas.CV)
+h1.CV.prob <- h.cv.sm.poisson(inf.mort, le.fm.0, method=loglik.CV)
 (h1 <- h1.CV.prob$h.cv)
 
 m1.poisson <- sm.poisson(inf.mort, le.fm.0, h = h1, col="black")
-
+lines(m1.poisson$eval.points, m1.poisson$estimate, col = "red", lwd=2)
+title(main = "Multiple regressions of le.fm.0 as a function of inf.mort")
 
   # using a standard nonparametric regression fit
 
-m1.std <- sm.regression(inf.mort, le.fm.0, add=T, col="red", lwd=2)
+m1.std <- sm.regression(inf.mort, le.fm.0, add=T, col="blue", lwd=2)
 
 
   # using a Poisson Generalized Linear Model
@@ -66,21 +68,27 @@ le.fm.0.ordered <- pmax(0,countries.ordered$le.fm)
 
 m1.glm.poisson <- glm(le.fm.0.ordered ~ inf.mort, family= poisson, data=countries.ordered)
 
-lines(m1.glm.poisson$fitted.values, col="blue", lwd=2)
+lines(countries.ordered$inf.mort, m1.glm.poisson$fitted.values, col="green", lwd=2)
+
+legend(x="topright",c("Local Poisson regression","Std Non-Param regression ","Poisson GLM"),lty=c(1,1,1),lwd=c(2.5,2.5),col=c("red","green", "blue"))
+
+
 
 #######
 ### le.fm.0 as a function of life.exp
 
   # Local Poisson regression
 
-h2.CV.prob <- h.cv.sm.poisson(life.exp, le.fm.0, method=prob.missclas.CV)
-h2 <- h2.CV.prob$h.cv
-m2.poisson <- sm.poisson(life.exp, le.fm.0, h = h2, col="black", lwd=2)
+h2.CV.prob <- h.cv.sm.poisson(life.exp, le.fm.0, method=loglik.CV)
+(h2 <- h2.CV.prob$h.cv)
 
+m2.poisson <- sm.poisson(life.exp, le.fm.0, h = h2, col="black")
+lines(m2.poisson$eval.points, m2.poisson$estimate, col = "red", lwd=2)
+title(main = "Multiple regressions of le.fm.0 as a function of life.exp")
 
   # using a standard nonparametric regression fit
 
-m2.std <- sm.regression(life.exp, le.fm.0, add=T, col="red", lwd=2)
+m2.std <- sm.regression(life.exp, le.fm.0, add=T, col="green", lwd=2)
 
 
   # using a Poisson Generalized Linear Model
@@ -92,4 +100,6 @@ le.fm.0.ordered <- pmax(0,countries.ordered$le.fm)
 
 m2.glm.poisson <- glm(le.fm.0.ordered ~ life.exp, family= poisson, data=countries.ordered)
 
-lines(m2.glm.poisson$fitted.values, col="blue", lwd=2)
+lines(countries.ordered$life.exp, m2.glm.poisson$fitted.values, col="blue", lwd=2)
+
+legend(x="topleft",c("Local Poisson regression","Std Non-Param regression ","Poisson GLM"),lty=c(1,1,1),lwd=c(2.5,2.5),col=c("red","green", "blue"))
